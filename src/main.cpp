@@ -102,17 +102,15 @@ int main() {
           double throttle = j[1]["throttle"];
 
           double Lf = 2.67;
-
+	  double latency_dt = 0.1;
 	  //to bring stability
 
-	  double px_init = v*0.1;
+	  //double px_init = v*0.1;
 	  double py_init =0;
-          double psi_init = (-1) * v * steering / Lf * 0.1;
+          //double psi_init = (-1) * v * steering / Lf * 0.1;
 
-          v += throttle * 0.1;
-          px += v * cos(psi) * 0.1;
-          py += v * sin(psi) * 0.1;
-          psi -= v * steering / Lf * 0.1;
+
+
 
           Eigen::VectorXd X(ptsx.size()); 
           Eigen::VectorXd Y(ptsx.size()); 
@@ -129,7 +127,14 @@ int main() {
           double cte = coeffs[0];
           double epsi = -atan(coeffs[1]);
 
-          Eigen::VectorXd state(6);
+          v += throttle * latency_dt;
+          px += v * cos(psi) * latency_dt;
+          py += v * sin(psi) * latency_dt;
+          psi -= v * steering / Lf * latency_dt;
+          cte +=  v * sin(epsi) * latency_dt;
+          epsi += v * steering / Lf * latency_dt; 
+          
+	  Eigen::VectorXd state(6);
           //state << px_init, py_init, psi_init, v, cte, epsi;
           state << 0, py_init, 0, v, cte, epsi;
 
