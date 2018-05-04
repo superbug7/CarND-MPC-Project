@@ -1,5 +1,6 @@
 # CarND-Controls-MPC
-Self-Driving Car Engineer Nanodegree Program
+
+The goal of this project is implementing a MPC to drive the car in simulation mode on a track. Below I describe the kinematic model. 
 
 ---
 
