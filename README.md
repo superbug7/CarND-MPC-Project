@@ -10,10 +10,10 @@ Kinematic model is used in this project to approximate the actual vehicle dynami
 
 The state, actuators and how the state changes over time based on the previous state and current actuator inputs are defined below: 
 
-x[t+1] = x[t] + v[t] * cos(psi[t]) * dt;
-y[t+1] = y[t] + v[t] * sin(psi[t]) * dt;
-v[t+1] = v[t] + a[t] * dt;
-psi[t+1] = psi[t] + v[t] * delta[t] * dt/Lf;
+*x[t+1] = x[t] + v[t] * cos(psi[t]) * dt;
+*y[t+1] = y[t] + v[t] * sin(psi[t]) * dt;
+*v[t+1] = v[t] + a[t] * dt;
+*psi[t+1] = psi[t] + v[t] * delta[t] * dt/Lf;
 
 Lf value of 2.67 is chosen. Latency is kept at 100 ms.
 
