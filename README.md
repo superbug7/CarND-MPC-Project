@@ -3,40 +3,24 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
-## Dependencies
+## MPC 
 
-* cmake >= 3.5
- * All OSes: [click here for installation instructions](https://cmake.org/install/)
-* make >= 4.1(mac, linux), 3.81(Windows)
-  * Linux: make is installed by default on most Linux distros
-  * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
-* gcc/g++ >= 5.4
-  * Linux: gcc / g++ is installed by default on most Linux distros
-  * Mac: same deal as make - [install Xcode command line tools]((https://developer.apple.com/xcode/features/)
-  * Windows: recommend using [MinGW](http://www.mingw.org/)
-* [uWebSockets](https://github.com/uWebSockets/uWebSockets)
-  * Run either `install-mac.sh` or `install-ubuntu.sh`.
-  * If you install from source, checkout to commit `e94b6e1`, i.e.
-    ```
-    git clone https://github.com/uWebSockets/uWebSockets
-    cd uWebSockets
-    git checkout e94b6e1
-    ```
-    Some function signatures have changed in v0.14.x. See [this PR](https://github.com/udacity/CarND-MPC-Project/pull/3) for more details.
+Kinematic model is used in this project to approximate the actual vehicle dynamics. It is simpler than dynamic models as it ignores tire forces, gravity, and mass. This simplification reduces the accuracy of the models, but it also makes them more tractable.
 
-* **Ipopt and CppAD:** Please refer to [this document](https://github.com/udacity/CarND-MPC-Project/blob/master/install_Ipopt_CppAD.md) for installation instructions.
-* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). This is already part of the repo so you shouldn't have to worry about it.
-* Simulator. You can download these from the [releases tab](https://github.com/udacity/self-driving-car-sim/releases).
-* Not a dependency but read the [DATA.md](./DATA.md) for a description of the data sent back from the simulator.
+The state, actuators and how the state changes over time based on the previous state and current actuator inputs are defined below: 
+
+x[t+1] = x[t] + v[t] * cos(psi[t]) * dt;
+y[t+1] = y[t] + v[t] * sin(psi[t]) * dt;
+v[t+1] = v[t] + a[t] * dt;
+psi[t+1] = psi[t] + v[t] * delta[t] * dt/Lf;
+
+Lf value of 2.67 is chosen. Latency is kept at 100 ms.
 
 
-## Basic Build Instructions
+### N & dt
 
-1. Clone this repo.
-2. Make a build directory: `mkdir build && cd build`
-3. Compile: `cmake .. && make`
-4. Run it: `./mpc`.
+Timestamp length (N)  is chosen to be 9 for this project. Time duration between each actuation ( dt ) is chosen to be 0.1. This was the tricky part to adjust for this project. I initially set dt at 0.05 but I could see large steering angle actuations with this value and I could not keep car on track. I took an approach of gradually increasing the duration to see if i get finer control. 0.1 value of dt seems to work best, although I had to adjust N as well, as there is a co-relation. The prediction horizon is almost 1 second, which I thought may be too may be a good range to actuate a vehicle. Although, once other latency oriented factors are brought into control, this may change. 
+
 
 ## Tips
 
